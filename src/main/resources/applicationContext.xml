@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/tx
+                           http://www.springframework.org/schema/tx/spring-tx.xsd
+                           http://www.springframework.org/schema/mvc
+                           http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+    
+    <!-- Enable annotation-driven transaction management -->
+    <tx:annotation-driven/>
+    
+    <!-- Enable Spring MVC annotation-driven configuration -->
+    <mvc:annotation-driven/>
+    
+    <!-- Hibernate Session Factory Bean -->
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="mappingLocations">
+            <list>
+                <value>classpath:META-INF/Student.hbm.xml</value>
+                <value>classpath:META-INF/Subject.hbm.xml</value>
+                <value>classpath:META-INF/Marks.hbm.xml</value>
+            </list>
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">${spring.jpa.properties.hibernate.dialect}</prop>
+                <prop key="hibernate.show_sql">${spring.jpa.show-sql}</prop>
+                <prop key="hibernate.hbm2ddl.auto">${spring.jpa.hibernate.ddl-auto}</prop>
+            </props>
+        </property>
+    </bean>
+    
+    <!-- Data Source -->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="${spring.datasource.driver-class-name}"/>
+        <property name="url" value="${spring.datasource.url}"/>
+        <property name="username" value="${spring.datasource.username}"/>
+        <property name="password" value="${spring.datasource.password}"/>
+    </bean>
+    
+    <!-- Transaction Manager -->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    
+    <!-- Repository Beans -->
+    <bean id="studentRepository" class="com.example.marksmgmt.repository.impl.StudentRepositoryImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    
+    <bean id="subjectRepository" class="com.example.marksmgmt.repository.impl.SubjectRepositoryImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    
+    <bean id="marksRepository" class="com.example.marksmgmt.repository.impl.MarksRepositoryImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    
+    <!-- Service Beans -->
+    <bean id="studentService" class="com.example.marksmgmt.service.impl.StudentServiceImpl">
+        <property name="studentRepository" ref="studentRepository"/>
+    </bean>
+    
+    <bean id="subjectService" class="com.example.marksmgmt.service.impl.SubjectServiceImpl">
+        <property name="subjectRepository" ref="subjectRepository"/>
+    </bean>
+    
+    <bean id="marksService" class="com.example.marksmgmt.service.impl.MarksServiceImpl">
+        <property name="marksRepository" ref="marksRepository"/>
+    </bean>
+    
+    <!-- Controller Beans -->
+    <bean id="homeController" class="com.example.marksmgmt.controller.HomeController"/>
+    
+    <bean id="studentController" class="com.example.marksmgmt.controller.StudentController">
+        <property name="studentService" ref="studentService"/>
+    </bean>
+    
+    <bean id="subjectController" class="com.example.marksmgmt.controller.SubjectController">
+        <property name="subjectService" ref="subjectService"/>
+    </bean>
+    
+    <bean id="marksController" class="com.example.marksmgmt.controller.MarksController">
+        <property name="marksService" ref="marksService"/>
+        <property name="studentService" ref="studentService"/>
+        <property name="subjectService" ref="subjectService"/>
+    </bean>
+    
+    <!-- Properties Configuration -->
+    <context:property-placeholder location="classpath:application.properties"/>
+</beans> 

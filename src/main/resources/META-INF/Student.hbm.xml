@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.example.marksmgmt.model.Student" table="students">
+        <id name="id" type="java.lang.Long">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <property name="rollNumber" type="java.lang.String">
+            <column name="roll_number" unique="true" not-null="true" />
+        </property>
+        <property name="name" type="java.lang.String">
+            <column name="name" not-null="true" />
+        </property>
+        <property name="email" type="java.lang.String">
+            <column name="email" unique="true" not-null="true" />
+        </property>
+        <property name="contactNumber" type="java.lang.String">
+            <column name="contact_number" />
+        </property>
+        <property name="address" type="java.lang.String">
+            <column name="address" />
+        </property>
+    </class>
+</hibernate-mapping> 
