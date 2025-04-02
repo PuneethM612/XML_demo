@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * Controller for handling student-related requests
  */
+@Controller
 public class StudentController {
     
     private StudentService studentService;

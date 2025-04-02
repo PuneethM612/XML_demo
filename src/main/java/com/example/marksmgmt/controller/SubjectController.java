@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * Controller for handling subject-related requests
  */
+@Controller
 public class SubjectController {
     
     private SubjectService subjectService;

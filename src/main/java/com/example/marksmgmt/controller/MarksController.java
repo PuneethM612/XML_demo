@@ -15,6 +15,7 @@ import java.util.Map;
 /**
  * Controller for handling marks-related requests
  */
+@Controller
 public class MarksController {
     
     private MarksService marksService;
@@ -87,8 +88,8 @@ public class MarksController {
     
     @PostMapping("/marks/search")
     public String searchMarks(@RequestParam("studentId") Long studentId, 
-                               @RequestParam("examType") ExamType examType,
-                               Model model) {
+                              @RequestParam("examType") ExamType examType,
+                              Model model) {
         Student student = studentService.findStudentById(studentId);
         List<Marks> results = marksService.findMarksByStudentAndExamType(student, examType);
         
